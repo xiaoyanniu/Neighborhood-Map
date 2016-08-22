@@ -32,8 +32,6 @@ function point(name, lat, long, URL) {
 
     // Add content for InfoWindow
     var contentString = '<div id="content">'+
-            '<div id="siteNotice">'+
-            '</div>'+
             '<h4>'+name+'</h4>'+
             '<div>'+
             '<p><b>'+name+'</b>, is an organic supermarket '+
@@ -84,7 +82,19 @@ var viewModel = {
         new point('Wegmans', 40.306241, -74.674985, 'http://www.wegmans.com/'),
         new point('Lee Turkey Farm', 40.266867, -74.564530, 'http://www.leeturkeyfarm.com/'),
         new point('Stults Farm', 40.310795, -74.567073, 'http://www.stultsfarm.com/')]),
-    mapControl: map
+    mapControl: map,
+    query: ko.observable(''),
+    search: function(value) {
+        // remove all the current points, which removes them from the view
+        viewModel.points.removeAll();
+
+        for(var x in points) {
+            if(points[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+                viewModel.points.push(points[x]);
+            }
+        }
+    }
 };
 
+viewModel.query.subscribe(viewModel.search);
 ko.applyBindings(viewModel);

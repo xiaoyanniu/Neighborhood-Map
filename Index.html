@@ -17,7 +17,7 @@
 		<div id="map"></div>
 		<div id="location-list">
 			<form id="form-container" class="form-container">
-        		<label for="street"> </label><input type="text" id="street" value="Search..." onclick="this.value='';">
+        		<input placeholder="Search…" type="search" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
     		</form>
 				<ul data-bind="foreach: {data: points}">
 					 <li>
