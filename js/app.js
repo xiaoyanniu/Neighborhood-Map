@@ -5,6 +5,7 @@ function point(name, lat, long, URL) {
     this.lat = ko.observable(lat);
     this.long = ko.observable(long);
     this.URL = ko.observable(URL);
+    this.showMe = ko.observable(true);
 
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(lat, long),
@@ -15,6 +16,10 @@ function point(name, lat, long, URL) {
         animation: google.maps.Animation.DROP,
         icon: "http://chart.apis.google.com/chart?chst=d_bubble_icon_text_small_withshadow&chld=shoppingcart|bbT|" + name + "|018E30|E0EBEB",
     });
+
+    //set marker initial property to be visible in order to hide and show later during search
+    this.marker = marker;
+    marker.setVisible(true);
 
     //if you need the poition while dragging
     google.maps.event.addListener(marker, 'drag', function() {
@@ -40,14 +45,13 @@ function point(name, lat, long, URL) {
             '</div>'+
             '</div>';
 
-    // InfoWindow
-   
+    // InfoWindow   
     var infowindow = new google.maps.InfoWindow({
           content: contentString,
           maxWidth: 250
         });
+    
     // Add click event for marker animation and InfoWindow
-
     google.maps.event.addListener(marker,'click', toggleBounce);
     
     function toggleBounce() {
@@ -85,12 +89,13 @@ var viewModel = {
     mapControl: map,
     query: ko.observable(''),
     search: function(value) {
-        // remove all the current points, which removes them from the view
-        viewModel.points.removeAll();
-
-        for(var x in points) {
-            if(points[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-                viewModel.points.push(points[x]);
+        for(var x in viewModel.points()) {
+            if(viewModel.points()[x].name().toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+                viewModel.points()[x].showMe(true);
+                viewModel.points()[x].marker.setVisible(true);
+            } else {
+                viewModel.points()[x].showMe(false);
+                viewModel.points()[x].marker.setVisible(false);
             }
         }
     }
