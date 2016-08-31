@@ -1,5 +1,5 @@
 
-/* create map */
+/* set marker */
 function point(name, lat, long, URL) {
     this.name = ko.observable(name);
     this.lat = ko.observable(lat);
@@ -76,6 +76,16 @@ var map = new google.maps.Map(document.getElementById('map'), {
     mapTypeId: google.maps.MapTypeId.ROADMAP
 });
 
+//google map resize to be responsive
+google.maps.event.addDomListener(window, "resize", function() {
+     var center = map.getCenter();
+     google.maps.event.trigger(map, "resize");
+     map.setCenter(center); 
+     if ($(window).width() < 850 || $(window).height() < 595) {
+        hideNav();
+    }
+});
+
 // set multiple markers
 var viewModel = {
     points: ko.observableArray([
@@ -103,3 +113,25 @@ var viewModel = {
 
 viewModel.query.subscribe(viewModel.search);
 ko.applyBindings(viewModel);
+
+//Hide and Show filter on click the arrow icon and change the icon as well
+var FilterVisible = true;
+function noNav() {
+    $("#filter").hide();    
+    $("#arrow").attr("src", "images/down-arrow.gif");
+    FilterVisible = false;
+}
+function yesNav() {
+    $("#filter").show();
+    $("#arrow").attr("src", "images/up-arrow.gif");
+    FilterVisible = true;
+}
+
+function hideNav() {
+    if(FilterVisible === true) {
+            noNav();            
+    } else {
+            yesNav();  
+    }
+}
+$("#arrow").click(hideNav);

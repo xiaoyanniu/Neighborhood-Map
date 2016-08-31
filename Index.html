@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Neighborhood Map</title>
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
@@ -10,21 +10,28 @@
 	<script src="http://knockoutjs.com/downloads/knockout-3.4.0.js"></script>
 </head>
 <body>
-	<div id="map-canvas">
+	<div id="container">
 		<div id="header">
 		Neighborhood Map
 		</div>
 		<div id="map"></div>
-		<div id="location-list">
+		<div id="arrow-container">
+            <div>
+            	<img id="arrow" src="images/up-arrow.gif" alt="arrow image">
+            </div>
+        </div> 			
+		<div id="filter">
 			<form id="form-container" class="form-container">
-        		<input placeholder="Search…" type="search" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
+        			<input placeholder="Search…" type="search" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
     		</form>
+    		<div id="location-list">	
 				<ul data-bind="foreach: {data: points}">
 					 <li data-bind="visible: showMe">
 						<strong data-bind="text: $data.name"></strong>
 						<p data-bind="text: $data.URL"></p>
 					 </li>
 				</ul>
+			</div>
 		</div>
 	</div>
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places" ></script> 

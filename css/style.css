@@ -51,17 +51,9 @@ h5 {
 
 }
 
-#content {
-  font-size: 12px;
-  color: #999;
-  line-height: 16px;
-  float: left;
-
-}
-
 p {
   font-size: 14px;
-  color: #333;
+  color: #666;
   line-height: 21px;
 }
 
@@ -87,10 +79,6 @@ a {
   padding: 10px;
 }
 
-.center-content {
-  padding: 2.5% 5%;
-}
-
 ul {
   list-style-type: none;
   list-style-position: outside;
@@ -113,13 +101,6 @@ li:hover {
   color: #ffc425;
 }
 
-.biopic {
-  float: left;
-  padding: 10px;
-  width: 200px;
-  display: none;
-}
-
 img {
   padding: 10px;
 }
@@ -128,6 +109,21 @@ span {
   padding: 5px;
 }
 
+#arrow {
+    height: 35px;
+    width: 35px;
+}
+
+#arrow-container {
+    position:relative;
+    top: 15px;
+    left: 95px;
+    background-color: orange;
+    opacity: 0.9;
+    width: 35px;
+    height: 30px;
+    border-radius: 50%;
+}
 
 #map {
     width: 100%;
@@ -136,10 +132,10 @@ span {
     bottom: 0px;
 }
 
-#location-list {
+#filter {
     width: 100%;
-    position:absolute;
-    top: 60px;
+    position:relative;
+    top: 15px;
     bottom: 0px;
     z-index:3;
     border: 1px solid #ffc425;
@@ -158,39 +154,22 @@ span {
 }
 /* Media queries to handle various device widths */
 
-@media only screen and (max-width: 1024px) {
-  #lets-connect {
-    margin-top: 5%;
+@media only screen and (min-width:900px){
+  #filter{
+    display:inline-table;
+  }
+
+  #arrow {
+    border-image-source: "images/up-arrow.gif";
   }
 }
 
-@media only screen and (max-width:900px) {
-  .biopic {
-    width: 175px;
-  }
-}
-
-@media only screen and (max-width: 750px) {
-  #lets-connect {
-    margin-top: 10%;
-  }
-  .biopic {
-    width: 150px;
-  }
-  .welcome-message {
+@media only screen and (max-width: 900px) {
+  #filter{
     display: none;
   }
-}
 
-#mapDiv {
-  height: 400px;
-  width: 100%;
-  padding-bottom: 5%;
-}
-
-@media only screen and (min-width: 750px) {
-  #skills-h3,
-  .biopic {
-    display: block;
+  #arrow {
+    border-image-source: "images/down-arrow.gif";
   }
 }
