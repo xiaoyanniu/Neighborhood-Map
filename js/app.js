@@ -1,10 +1,12 @@
 
 /* set marker */
-function point(name, lat, long, URL) {
+function point(name, lat, long, URL, phone, address) {
     this.name = ko.observable(name);
     this.lat = ko.observable(lat);
     this.long = ko.observable(long);
     this.URL = ko.observable(URL);
+    this.phone = ko.observable(phone);
+    this.address = ko.observable(address)
     this.showMe = ko.observable(true);
 
     var marker = new google.maps.Marker({
@@ -76,26 +78,14 @@ var map = new google.maps.Map(document.getElementById('map'), {
     mapTypeId: google.maps.MapTypeId.ROADMAP
 });
 
-//google map resize to be responsive
-google.maps.event.addDomListener(window, "resize", function() {
-     var center = map.getCenter();
-     google.maps.event.trigger(map, "resize");
-     map.setCenter(center); 
-     if ($(window).width() < 850 || $(window).height() < 595) {
-        hideNav();
-    }
-});
-
 // set multiple markers
 var viewModel = {
     points: ko.observableArray([
-        new point('McCaffrey', 40.292691, -74.583216, 'http://mccaffreys.com/'),
-        new point('Mrs. Green', 40.313247, -74.620875, 'http://mrsgreens.com/'),
-        new point('Whole Food', 40.308153, -74.667866, 'http://www.wholefoodsmarket.com/'),
-        new point('Trader Joe', 40.310902, -74.661156, 'http://www.traderjoes.com/'),
-        new point('Wegmans', 40.306241, -74.674985, 'http://www.wegmans.com/'),
-        new point('Lee Turkey Farm', 40.266867, -74.564530, 'http://www.leeturkeyfarm.com/'),
-        new point('Stults Farm', 40.310795, -74.567073, 'http://www.stultsfarm.com/')]),
+        new point('McCaffrey', 40.292691, -74.583216, 'http://mccaffreys.com/', '(609) 301-8718', '761 Rt 33 W, Hightstown, NJ 08520'),
+        new point('Mrs. Green', 40.313247, -74.620875, 'http://mrsgreens.com/', '(609) 373-6030', '64 Princeton Hightstown Rd, West Windsor, NJ 08550'),
+        new point('Whole Food', 40.308153, -74.667866, 'http://www.wholefoodsmarket.com/', '(609) 799-2919', '3495 US Hwy 1, Princeton, NJ 08540'),
+        new point('Trader Joe', 40.310902, -74.661156, 'http://www.traderjoes.com/', '(609) 897-0581', '3528 Brunswick Pike, Princeton, NJ 08540'),
+        new point('Wegmans', 40.306241, -74.674985, 'http://www.wegmans.com/', '(609) 919-9300', '240 Nassau Park Blvd, Princeton, NJ 08540')]),
     mapControl: map,
     query: ko.observable(''),
     search: function(value) {
@@ -116,6 +106,8 @@ ko.applyBindings(viewModel);
 
 //Hide and Show filter on click the arrow icon and change the icon as well
 var FilterVisible = true;
+var ArrowClick = 0;
+
 function noNav() {
     $("#filter").hide();    
     $("#arrow").attr("src", "images/down-arrow.gif");
@@ -128,10 +120,26 @@ function yesNav() {
 }
 
 function hideNav() {
+    ArrowClick = 1;
     if(FilterVisible === true) {
             noNav();            
     } else {
             yesNav();  
     }
 }
+
 $("#arrow").click(hideNav);
+
+//google map resize to be responsive
+google.maps.event.addDomListener(window, "resize", function() {
+    var center = map.getCenter();
+    google.maps.event.trigger(map, "resize");
+    map.setCenter(center);
+    if (ArrowClick == 0) {
+        if($(window).width() < 899) {
+            hideNav();
+        } else {
+            showNav();
+        }
+    }
+});

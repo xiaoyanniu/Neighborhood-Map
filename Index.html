@@ -28,7 +28,10 @@
 				<ul data-bind="foreach: {data: points}">
 					 <li data-bind="visible: showMe">
 						<strong data-bind="text: $data.name"></strong>
-						<p data-bind="text: $data.URL"></p>
+						<ul id="small-list">
+							<li id="phone" data-bind="text: $data.phone"></li>
+							<li id="address" data-bind="text: $data.address"></li>
+						</ul>
 					 </li>
 				</ul>
 			</div>
