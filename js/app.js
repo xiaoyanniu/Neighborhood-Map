@@ -9,6 +9,7 @@ function point(name, lat, long, URL, phone, address) {
     this.address = ko.observable(address)
     this.showMe = ko.observable(true);
 
+
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(lat, long),
         title: name,
@@ -39,9 +40,8 @@ function point(name, lat, long, URL, phone, address) {
 
     // Add content for InfoWindow
     var contentString = '<div id="content">' + 
-            '<h4>' + name + '</h4>' + '<p id="text">Rating on <a id="yelp-url">yelp</a>: ' +
-            '<img id="yelp"></p>' + 
-            '<p><b>' + name + '</b>, is an organic supermarket ' + 
+            '<h4>' + name + '</h4>' + '<p id="text"> <a id="yelp-url"> Rating on Yelp </a> <img id="yelp"></p>' +
+            + '<p><b>' + name + '</b>, is an organic supermarket ' + 
             '<a href="' + URL + '">' +
             URL + '</a></p>' + 
             '</div>';
@@ -61,6 +61,8 @@ function point(name, lat, long, URL, phone, address) {
         } else {
           marker.setAnimation(google.maps.Animation.BOUNCE);
           infowindow.open(map, marker);
+
+          getYelpData(name);
         }
     }
 
@@ -68,9 +70,10 @@ function point(name, lat, long, URL, phone, address) {
         google.maps.event.addListener(infowindow, 'closeclick', function() {  
             marker.setAnimation(null); 
         });
+}
 
   // set up Yelp API
-    function getYelpData() {
+function getYelpData(name) {
         // Uses the oauth-signature package installed with bower per https://github.com/bettiolo/oauth-signature-js
 
         // Use the GET method for the request
@@ -132,8 +135,7 @@ function point(name, lat, long, URL, phone, address) {
 
     // Send off the ajax request to Yelp
     $.ajax(ajaxSettings);
-    };
-}
+};
 
 // Init map
 var map = new google.maps.Map(document.getElementById('map'), {
@@ -202,8 +204,6 @@ google.maps.event.addDomListener(window, "resize", function() {
     if (ArrowClick == 0) {
         if($(window).width() < 899) {
             hideNav();
-        } else {
-            showNav();
         }
     }
 });
