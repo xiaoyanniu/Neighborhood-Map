@@ -1,6 +1,20 @@
+// Defnine InfoWindow
 
-/* Set marker for the map*/
+var infowindow;
+
+function initMap() {
+    var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 13,
+    center: new google.maps.LatLng(40.299159, -74.623803),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+    infowindow = new google.maps.InfoWindow({
+          maxWidth: 250
+    });
+
 function point(name, lat, long, URL, phone, address) {
+    var self = this;
     this.name = ko.observable(name);
     this.lat = ko.observable(lat);
     this.long = ko.observable(long);
@@ -8,16 +22,20 @@ function point(name, lat, long, URL, phone, address) {
     this.phone = ko.observable(phone);
     this.address = ko.observable(address)
     this.showMe = ko.observable(true);
+    
+    createMarker(this);
+}
 
-
+/* Set marker for the map*/
+function createMarker(point) {
     var marker = new google.maps.Marker({
-        position: new google.maps.LatLng(lat, long),
-        title: name,
-        url: URL,
+        position: new google.maps.LatLng(point.lat(), point.long()),
+        title: point.name(),
+        url: point.URL(),
         map: map,
         draggable: true,
         animation: google.maps.Animation.DROP,
-        icon: "http://chart.apis.google.com/chart?chst=d_bubble_icon_text_small_withshadow&chld=shoppingcart|bbT|" + name + "|018E30|E0EBEB",
+        icon: "http://chart.apis.google.com/chart?chst=d_bubble_icon_text_small_withshadow&chld=shoppingcart|bbT|" + point.name() + "|018E30|E0EBEB",
     });
 
     //Set marker's initial property to be visible in order to hide and show later during search
@@ -38,19 +56,7 @@ function point(name, lat, long, URL, phone, address) {
         this.long(pos.lng());
     }.bind(this));
 
-    // Add content for InfoWindow
-    var contentString = '<div id="content">' + 
-            '<h4>' + name + '</h4>' + '<p id="text"> <a id="yelp-url"> Rating on Yelp </a> <img id="yelp"></p>' +
-            + '<p><b>' + name + '</b>, is an organic supermarket ' + 
-            '<a href="' + URL + '">' +
-            URL + '</a></p>' + 
-            '</div>';
 
-    // Defnine InfoWindow   
-    var infowindow = new google.maps.InfoWindow({
-          content: contentString,
-          maxWidth: 250
-    });
 
     // Add click event for marker animation and InfoWindow
     google.maps.event.addListener(marker,'click', toggleBounce);
@@ -60,9 +66,9 @@ function point(name, lat, long, URL, phone, address) {
           marker.setAnimation(null);
         } else {
           marker.setAnimation(google.maps.Animation.BOUNCE);
-          infowindow.open(map, marker);
+          //infowindow.open(map, marker);
 
-          getYelpData(name);
+          getYelpData(this);
         }
     }
 
@@ -70,10 +76,11 @@ function point(name, lat, long, URL, phone, address) {
         google.maps.event.addListener(infowindow, 'closeclick', function() {  
             marker.setAnimation(null); 
         });
+
 }
 
   // set up Yelp API
-function getYelpData(name) {
+function getYelpData(point) {
         // Uses the oauth-signature package installed with bower per https://github.com/bettiolo/oauth-signature-js
 
         // Use the GET method for the request
@@ -124,6 +131,17 @@ function getYelpData(name) {
             cache: true,
             dataType: 'jsonp',
             success: function(response) {
+                    // Add content for InfoWindow
+                var contentString = '<div id="content">' + 
+                    '<h4>' + point.name + '</h4>' + '<p id="text"> Rating on  <a id="yelp-url"> Yelp </a> ' + '<img id="yelp" src="' + response.businesses[0].rating_img_url + '"></p>'
+                    + '<p><b>' + point.name + '</b>, is an organic supermarket ' + 
+                    '<a href="' + point.URL+ '">' +
+                    point.URL + '</a></p>' + 
+                    '</div>';
+
+                    infowindow.setContent(contentString);
+                    infowindow.open(map,point.marker);
+
                 // Update the infoWindow to display the yelp rating image
                 $('#yelp').attr("src", response.businesses[0].rating_img_url);
                 $('#yelp-url').attr("href", response.businesses[0].url);
@@ -138,11 +156,6 @@ function getYelpData(name) {
 };
 
 // Init map
-var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 13,
-    center: new google.maps.LatLng(40.299159, -74.623803),
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-});
 
 // Set multiple markers
 var viewModel = {
@@ -197,14 +210,14 @@ function hideNav() {
 $("#arrow").click(hideNav);
 
 //To be responsive when resizing the google map
-google.maps.event.addDomListener(window, "resize", function() {
-    var center = map.getCenter();
-    google.maps.event.trigger(map, "resize");
-    map.setCenter(center);
-    if (ArrowClick == 0) {
-        if($(window).width() < 899) {
+    google.maps.event.addDomListener(window, "resize", function() {
+        var center = map.getCenter();
+        google.maps.event.trigger(map, "resize");
+        map.setCenter(center);
+        if (ArrowClick == 0) {
+            if($(window).width() < 899) {
             hideNav();
+            }
         }
-    }
-});
-
+    });
+}
