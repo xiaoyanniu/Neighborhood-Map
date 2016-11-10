@@ -1,5 +1,6 @@
 
 var infowindow;
+var markersArray = [];
 
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -12,7 +13,7 @@ function initMap() {
         maxWidth: 250
     });
 
-    var markersArray = [];
+
     // create markers
     function point(name, lat, long, URL, phone, address) {
         var self = this;
@@ -125,32 +126,27 @@ function initMap() {
             success: function(response) {
                 // Add content for InfoWindow
                 var contentString = '<div id="content">' +
-                    '<h4>' + point.name() + '</h4>' + '<p id="text"> <a id="yelp-url"> Rating on Yelp </a> ' + '<img id="yelp" src="' + response.businesses[0].rating_img_url + '"></p>'
+                    '<h4>' + point.name() + '</h4>' + '<p id="text"> <a id="yelp-url" target="_blank" href="' + response.businesses[0].url + '"> Rating on Yelp </a> ' + '<img id="yelp" src="' + response.businesses[0].rating_img_url + '"></p>'
                     + '<p><b>' + point.name() + '</b>, is an organic supermarket ' +
-                    '<a href="' + point.URL()+ '">' +
+                    '<a href="' + point.URL()+ '" target="_blank">' +
                     point.URL() + '</a></p>' +
                     '</div>';
 
                     infowindow.setContent(contentString);
                     infowindow.open(map,point.marker);
-
-                // Update the infoWindow to display the yelp rating image
-                $('#yelp').attr("src", response.businesses[0].rating_img_url);
-                $('#yelp-url').attr("href", response.businesses[0].url);
             },
 
             // Show error message when Yelp API is not working properly and no rating information is available
             error: function() {
                 var contentString = '<div id="content">' +
-                    '<h4>' + point.name() + '</h4>' + '<p id="text" style="color: red">' + '</p>'
+                    '<h4>' + point.name() + '</h4>' + '<p id="text" style="color: red">' + 'Sorry, rating could not be retrieved from yelp.' + '</p>'
                     + '<p><b>' + point.name() + '</b>, is an organic supermarket ' +
-                    '<a href="' + point.URL()+ '">' +
+                    '<a href="' + point.URL()+ '" target="_blank">' +
                     point.URL() + '</a></p>' +
                     '</div>';
 
                     infowindow.setContent(contentString);
                     infowindow.open(map,point.marker);
-                $('#text').html('Sorry, rating could not be retrieved from yelp.');
             }
         };
 

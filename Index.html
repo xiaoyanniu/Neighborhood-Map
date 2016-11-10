@@ -2,28 +2,26 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Neighborhood Map</title>
 	<link rel="stylesheet" href="css/style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<script src="js/bootstrap.min.js"></script>
-	<script src="http://knockoutjs.com/downloads/knockout-3.4.0.js"></script>
 </head>
 <body>
-	<div id="container">
-		<div id="header">
+	<main id="container">
+		<header id="header">
 		Neighborhood Map
-		</div>
-		<div id="map"></div>
-		<div id="arrow-container">
-            <div>
+		</header>
+		<section id="map"></section>
+		<aside id="arrow-container">          
             	<img id="arrow" src="images/up-arrow.gif" alt="arrow image">
-            </div>
-        </div>
-		<div id="filter">
+        </aside>
+		<aside id="filter">
 			<form id="form-container" class="form-container">
         			<input placeholder="Search…" type="search" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
     		</form>
-    		<div id="location-list">
+    		<section id="location-list">
 				<ul data-bind="foreach: {data: points}">
 					 <li id="list" data-bind="visible: showMe, click: clickMarker">
 						<strong data-bind="text: $data.name"></strong>
@@ -33,10 +31,10 @@
 						</ul>
 					 </li>
 				</ul>
-			</div>
-		</div>
-	</div>
-	<script async src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+			</section>
+		</aside>
+	</main>
+	<script src="http://knockoutjs.com/downloads/knockout-3.4.0.js"></script>
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOW_HTkfQ5_uEj71SsFJfNyAMWQ6yUvKI&callback=initMap" onerror="googleError()" type="text/javascript"></script>
 	<script src="js/oauth-signature.min.js"></script>
 	<script src="js/app.js"></script>
