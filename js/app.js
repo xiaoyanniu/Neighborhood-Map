@@ -16,7 +16,6 @@ function initMap() {
 
     // create markers
     function point(name, lat, long, URL, phone, address) {
-        var self = this;
         this.name = ko.observable(name);
         this.lat = ko.observable(lat);
         this.long = ko.observable(long);
@@ -53,7 +52,7 @@ function initMap() {
                     google.maps.event.trigger(point.marker, "click");
                 }
             }
-        }
+        };
 
         // Add click event for marker animation and call toggleBounce function to get yelp data for InfoWindow
         google.maps.event.addListener(marker,'click', toggleBounce);
@@ -152,7 +151,7 @@ function initMap() {
 
         // Send off the ajax request to Yelp
         $.ajax(ajaxSettings);
-    };
+    }
 
     // Set multiple markers
     var viewModel = {
@@ -224,7 +223,7 @@ function initMap() {
 var text = '<strong>Google Map API is not working right now</strong>';
 function googleError(){
     //Show error message on the screen when goole API is not working properly.
-    var paragraph1 = '<div> &nbsp;</div>'
+    var paragraph1 = '<div> &nbsp;</div>';
     var paragraph2 = '<div class="page-header" style="text-align: center; font-size: 25px;"' + '">' + text + '</div>' + '</div>';
 
     $('#map').append(paragraph1);
